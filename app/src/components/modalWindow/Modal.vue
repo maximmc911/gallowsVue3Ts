@@ -1,18 +1,44 @@
 <template>
   <!-- Container for final message -->
-  <div class="popup-container">
+  <div class="popup-container" :class="{ active: open }">
     <div class="popup">
-      <h2>
+      <div v-if="gameStatus == `win`">
         <h2>Поздравляю, вы победили! 😃</h2>
-        <!-- <h2>Вы проиграли. 😕</h2> -->
-      </h2>
-      <!-- <h3>...имя: Лидия</h3> -->
-      <button>Сыграть еще раз</button>
+      </div>
+      <div v-if="gameStatus == `lose`">
+        <h2>Вы проиграли. 😕</h2>
+        <h3>...имя: {{ props.word }}</h3>
+      </div>
+      <button @click="emit('restart')">Сыграть еще раз</button>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue";
+import { Status } from "../interface/type";
+interface Props {
+  word: string;
+}
+const props = defineProps<Props>();
+const open = ref<boolean>(false);
+const gameStatus = ref<Status | null>(null);
+
+const isVisible = (status: Status) => {
+  open.value = true;
+  gameStatus.value = status;
+};
+const noVisible = () => {
+  open.value = false;
+};
+defineExpose({
+  isVisible,
+  noVisible,
+});
+const emit = defineEmits<{
+  (e: "restart"): void;
+}>();
+</script>
 
 <style scoped>
 .popup-container {
@@ -22,7 +48,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
 }
@@ -56,5 +82,8 @@
 
 .popup button:focus {
   outline: 0;
+}
+.popup-container.active {
+  display: flex;
 }
 </style>

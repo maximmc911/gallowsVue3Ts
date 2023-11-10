@@ -2,14 +2,19 @@
   <div class="wrong-letters-container">
     <div class="wrong-letters">
       <p>Ошибки</p>
-      <span>п , </span>
-      <span>м , </span>
-      <span>с </span>
+      <span v-for="(item, index) in props.errorLetter" :key="index">
+        {{ `${item}, ` }}
+      </span>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+interface Props {
+  errorLetter: object;
+}
+const props = defineProps<Props>();
+</script>
 
 <style scoped>
 .wrong-letters-container {

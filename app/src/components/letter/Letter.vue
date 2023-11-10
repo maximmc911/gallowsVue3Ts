@@ -1,14 +1,19 @@
+<script setup lang="ts">
+interface Props {
+  word: string;
+  correctLetters: string[];
+}
+
+const props = defineProps<Props>();
+</script>
 <template>
   <div class="word">
-    <span class="letter">л</span>
-    <span class="letter"></span>
-    <span class="letter">д</span>
-    <span class="letter"></span>
-    <span class="letter"></span>
+    <span class="letter" v-for="(item, index) in props.word" :key="index">
+      {{ props.correctLetters.includes(item) ? item : `` }}
+    </span>
+    <div></div>
   </div>
 </template>
-
-<script setup lang="ts"></script>
 
 <style scoped>
 .word {
